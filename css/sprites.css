@@ -1,0 +1,175 @@
+/**************************************************************************************
+							iConSweets CSS Sprites
+					Author:			Jerry Wood
+					WWW:			http://plugish.com
+					Twitter:		@jjswebs
+					
+					Icons by:		YummyBubble
+					WWW:			http://yummybubble.nl
+					
+	This code is licensed under the Creative Commons Attribution 3.0 US which means
+	you can distribute it as you please provided you follow the following guidelines:
+	
+	1)	You are not to Sell the code/sprites as-is, unless it is included within a 
+		website package of some sort.
+	2)	You must attribute the code to me in one of the two manners:
+		a)	Link to http://plugish.com
+		b)	Mention my twitter @jjswebs
+***************************************************************************************/
+
+/** 
+*Sprite Handling 
+**/
+
+/* Icon colors */
+.iconSweets .dark .jwp_icon32{background-image: url(../img/iconSweets-b-32.png);}
+.iconSweets .neutral .jwp_icon32{background-image: url(../img/iconSweets-g-32.png);}
+.iconSweets .light .jwp_icon32{background-image: url(../img/iconSweets-w-32.png);}
+.iconSweets .dark .jwp_icon16{background-image: url(../img/iconSweets-b-16.png);}
+.iconSweets .neutral .jwp_icon16{background-image: url(../img/iconSweets-g-16.png);}
+.iconSweets .light .jwp_icon16{background-image: url(../img/iconSweets-w-16.png);}
+
+/* 32x icons */
+.iconSweets .jwp_icon32{width: 32px; height: 32px; background: top left no-repeat;}
+.iconSweets .jwp_icon32.user{background-position: 0px 0px;}
+.iconSweets .jwp_icon32.users{background-position: -33px 0px;}
+.iconSweets .jwp_icon32.cal{background-position: -66px 0px;}
+.iconSweets .jwp_icon32.speech{background-position: -99px 0px;}
+.iconSweets .jwp_icon32.polaroid{background-position: -132px 0px;}
+.iconSweets .jwp_icon32.film{background-position: -165px 0px;}
+
+.iconSweets .jwp_icon32.mail{background-position: 0px -33px;}
+.iconSweets .jwp_icon32.mailNew{background-position: -33px -33px;}
+.iconSweets .jwp_icon32.contact{background-position: -66px -33px;}
+.iconSweets .jwp_icon32.presentation{background-position: -99px -33px;}
+.iconSweets .jwp_icon32.gear{background-position: -132px -33px;}
+.iconSweets .jwp_icon32.unlock{background-position: -165px -33px;}
+
+.iconSweets .jwp_icon32.lock{background-position: 0px -66px;}
+.iconSweets .jwp_icon32.screen{background-position: -33px -66px;}
+.iconSweets .jwp_icon32.save{background-position: -66px -66px;}
+.iconSweets .jwp_icon32.edit{background-position: -99px -66px;}
+.iconSweets .jwp_icon32.cut{background-position: -132px -66px;}
+.iconSweets .jwp_icon32.paste{background-position: -165px -66px;}
+
+.iconSweets .jwp_icon32.facebook{background-position: 0px -99px;}
+.iconSweets .jwp_icon32.twitter{background-position: -33px -99px;}
+.iconSweets .jwp_icon32.search{background-position: -66px -99px;}
+.iconSweets .jwp_icon32.power{background-position: -99px -99px;}
+.iconSweets .jwp_icon32.contacts{background-position: -132px -99px;}
+.iconSweets .jwp_icon32.time{background-position: -165px -99px;}
+
+.iconSweets .jwp_icon32.documents{background-position: 0px -132px;}
+.iconSweets .jwp_icon32.pdfs{background-position: -33px -132px;}
+.iconSweets .jwp_icon32.xDocuments{background-position: -66px -132px;}
+.iconSweets .jwp_icon32.pDocuments{background-position: -99px -132px;}
+.iconSweets .jwp_icon32.zDocuments{background-position: -132px -132px;}
+.iconSweets .jwp_icon32.document{background-position: -165px -132px;}
+
+.iconSweets .jwp_icon32.wDocuments{background-position: 0px -165px;}
+.iconSweets .jwp_icon32.pdf{background-position: -33px -165px;}
+.iconSweets .jwp_icon32.wDocument{background-position: -66px -165px;}
+.iconSweets .jwp_icon32.xDocument{background-position: -99px -165px;}
+.iconSweets .jwp_icon32.pDocument{background-position: -132px -165px;}
+.iconSweets .jwp_icon32.zDocument{background-position: -165px -165px;}
+
+.iconSweets .jwp_icon32.music{background-position: 0px -198px;}
+.iconSweets .jwp_icon32.play{background-position: -33px -198px;}
+.iconSweets .jwp_icon32.stop{background-position: -66px -198px;}
+.iconSweets .jwp_icon32.next{background-position: -99px -198px;}
+.iconSweets .jwp_icon32.prev{background-position: -132px -198px;}
+.iconSweets .jwp_icon32.eject{background-position: -165px -198px;}
+
+.iconSweets .jwp_icon32.minus{background-position: 0px -231px;}
+.iconSweets .jwp_icon32.plus{background-position: -33px -231px;}
+.iconSweets .jwp_icon32.cancel{background-position: -66px -231px;}
+.iconSweets .jwp_icon32.confirm{background-position: -99px -231px;}
+.iconSweets .jwp_icon32.home{background-position: -132px -231px;}
+.iconSweets .jwp_icon32.snipe{background-position: -165px -231px;}
+
+.iconSweets .jwp_icon32.fav{background-position: 0px -264px;}
+.iconSweets .jwp_icon32.unfav{background-position: -33px -264px;}
+.iconSweets .jwp_icon32.folder{background-position: -66px -264px;}
+.iconSweets .jwp_icon32.tag{background-position: -99px -264px;}
+.iconSweets .jwp_icon32.bookmark{background-position: -132px -264px;}
+.iconSweets .jwp_icon32.graph{background-position: -165px -264px;}
+
+.iconSweets .jwp_icon32.heart{background-position: 0px -297px;}
+.iconSweets .jwp_icon32.left{background-position: -33px -297px;}
+.iconSweets .jwp_icon32.right{background-position: -66px -297px;}
+.iconSweets .jwp_icon32.down{background-position: -99px -297px;}
+.iconSweets .jwp_icon32.up{background-position: -132px -297px;}
+.iconSweets .jwp_icon32.bBookmark{background-position: -165px -297px;}
+
+/* 16x icons */
+.iconSweets .jwp_icon16{width: 16px; height: 16px; background: top left no-repeat;}
+.iconSweets .jwp_icon16.user{background-position: 0px 0px;}
+.iconSweets .jwp_icon16.users{background-position: -17px 0px;}
+.iconSweets .jwp_icon16.cal{background-position: -34px 0px;}
+.iconSweets .jwp_icon16.speech{background-position: -51px 0px;}
+.iconSweets .jwp_icon16.polaroid{background-position: -68px 0px;}
+.iconSweets .jwp_icon16.film{background-position: -85px 0px;}
+
+.iconSweets .jwp_icon16.mail{background-position: 0px -17px;}
+.iconSweets .jwp_icon16.mailNew{background-position: -17px -17px;}
+.iconSweets .jwp_icon16.contact{background-position: -34px -17px;}
+.iconSweets .jwp_icon16.presentation{background-position: -51px -17px;}
+.iconSweets .jwp_icon16.gear{background-position: -68px -17px;}
+.iconSweets .jwp_icon16.unlock{background-position: -85px -17px;}
+
+.iconSweets .jwp_icon16.lock{background-position: 0px -34px;}
+.iconSweets .jwp_icon16.screen{background-position: -17px -34px;}
+.iconSweets .jwp_icon16.save{background-position: -34px -34px;}
+.iconSweets .jwp_icon16.edit{background-position: -51px -34px;}
+.iconSweets .jwp_icon16.cut{background-position: -68px -34px;}
+.iconSweets .jwp_icon16.paste{background-position: -85px -34px;}
+
+.iconSweets .jwp_icon16.facebook{background-position: 0px -51px;}
+.iconSweets .jwp_icon16.twitter{background-position: -17px -51px;}
+.iconSweets .jwp_icon16.search{background-position: -34px -51px;}
+.iconSweets .jwp_icon16.power{background-position: -51px -51px;}
+.iconSweets .jwp_icon16.contacts{background-position: -68px -51px;}
+.iconSweets .jwp_icon16.time{background-position: -85px -51px;}
+
+.iconSweets .jwp_icon16.documents{background-position: 0px -68px;}
+.iconSweets .jwp_icon16.pdfs{background-position: -17px -68px;}
+.iconSweets .jwp_icon16.xDocuments{background-position: -34px -68px;}
+.iconSweets .jwp_icon16.pDocuments{background-position: -51px -68px;}
+.iconSweets .jwp_icon16.zDocuments{background-position: -68px -68px;}
+.iconSweets .jwp_icon16.document{background-position: -85px -68px;}
+
+.iconSweets .jwp_icon16.wDocuments{background-position: 0px -85px;}
+.iconSweets .jwp_icon16.pdf{background-position: -17px -85px;}
+.iconSweets .jwp_icon16.wDocument{background-position: -34px -85px;}
+.iconSweets .jwp_icon16.xDocument{background-position: -51px -85px;}
+.iconSweets .jwp_icon16.pDocument{background-position: -68px -85px;}
+.iconSweets .jwp_icon16.zDocument{background-position: -85px -85px;}
+
+.iconSweets .jwp_icon16.music{background-position: 0px -102px;}
+.iconSweets .jwp_icon16.play{background-position: -17px -102px;}
+.iconSweets .jwp_icon16.stop{background-position: -34px -102px;}
+.iconSweets .jwp_icon16.next{background-position: -51px -102px;}
+.iconSweets .jwp_icon16.prev{background-position: -68px -102px;}
+.iconSweets .jwp_icon16.eject{background-position: -85px -102px;}
+
+.iconSweets .jwp_icon16.minus{background-position: 0px -119px;}
+.iconSweets .jwp_icon16.plus{background-position: -17px -119px;}
+.iconSweets .jwp_icon16.cancel{background-position: -34px -119px;}
+.iconSweets .jwp_icon16.confirm{background-position: -51px -119px;}
+.iconSweets .jwp_icon16.home{background-position: -68px -119px;}
+.iconSweets .jwp_icon16.snipe{background-position: -85px -119px;}
+
+.iconSweets .jwp_icon16.fav{background-position: 0px -136px;}
+.iconSweets .jwp_icon16.unfav{background-position: -17px -136px;}
+.iconSweets .jwp_icon16.folder{background-position: -34px -136px;}
+.iconSweets .jwp_icon16.tag{background-position: -51px -136px;}
+.iconSweets .jwp_icon16.bookmark{background-position: -68px -136px;}
+.iconSweets .jwp_icon16.graph{background-position: -85px -136px;}
+
+.iconSweets .jwp_icon16.heart{background-position: 0px -153px;}
+.iconSweets .jwp_icon16.left{background-position: -17px -153px;}
+.iconSweets .jwp_icon16.right{background-position: -34px -153px;}
+.iconSweets .jwp_icon16.down{background-position: -51px -153px;}
+.iconSweets .jwp_icon16.up{background-position: -68px -153px;}
+.iconSweets .jwp_icon16.bBookmark{background-position: -85px -153px;}
+/* END Sprite Handling */

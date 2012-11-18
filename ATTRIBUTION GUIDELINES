@@ -1,0 +1,5 @@
+By downloading this opensource software you are agreeing to abide by the LICENSE included. In-turn, you are also required to abide by my attribution guidelines stated here.
+
+For attribution I only request one small thing.  In the control panel you have a header with a link and framework version.  I only ask that you leave that in tact.  It will provide you, or your client, with a direct link to either the Github Download, or my website where you or your client can learn more about it.
+
+I understand that most, if not all, developers want to link to their site aswell, which is why I put the plugin/theme version information along with the author's link in the header aswell.  This infomration is pulled directly from the functions.php file or style.css, depending of course on rather the framework is within a theme or plugin.

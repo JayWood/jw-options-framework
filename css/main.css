@@ -1,0 +1,25 @@
+/* CSS Document */
+
+@import url(sprites.css);
+
+body{background: #2a2a2a url(../img/indexImgs/indexBg.jpg) top left repeat-x;}
+a{color: #F90; text-decoration: none;}
+a:visited{color: #CCC;}
+a:hover{color: #CCC; text-decoration: underline;}
+
+div.wrap{width: 960px; margin: 0 auto; position:relative;}
+div.logo{width: 255px; height:73px; background:#FFF url(../img/indexImgs/logo.png) top left; position: absolute; top: 10px; left: 10px;}
+div.logo a{display:block; width:255px; height: 73px;}
+div#content{position: absolute; top:93px; width: 960px;}
+
+h1{color: #F90; margin-bottom: 5px; font: bold 20px Georigia}
+h1 span{font-size: 12px; color: #CCC;}
+hr.divider{background: #CCC;}
+
+.lColumn{float:left;}
+.rColumn{float:right;}
+.clear{clear:both;}
+
+span.t{width:100px; display:block; float: left; font-weight:bold; font-variant: small-caps;}
+
+.lColumn, .rColumn{border: 3px solid #FFF; border-radius: 6px; width: 457px; margin: 0 7px; background: #FFF;}

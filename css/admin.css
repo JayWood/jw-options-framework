@@ -1,0 +1,99 @@
+/* CSS Document */
+
+/**
+*	Get the cool sprites
+**/
+@import url(sprites.css);
+
+#jw_options_panel{width:960px; position: relative; height:100%; margin: 10px; background:url('../img/panelbg.jpg') top left repeat-y; overflow:hidden;}
+
+#jw_panel_form{}
+
+/**
+*	Panel Header
+**/
+#jw_header{width: 960px; background-color: #2d2d2d; color:#7e7e7e; height: 50px; z-index: 4;}
+#jw_header:after{clear:both;}
+#jw_header a, #jw_header a:visited{color: #666; text-decoration: none; font-weight: bold;}
+#jw_header a:hover{color: #CCC;}
+#jw_header > div{margin: 0px 10px; float:left; display: inline;}
+#jw_header .info_text{font: 10px Tahoma, Geneva, sans-serif; color:#666; padding: 0; margin: 0; line-height:15px}
+#jw_header .plugin_title{width: 220px;}
+#jw_header .plugin_title h2{font: 22px Verdana, Geneva, sans-serif; color: #CCC; text-shadow:none; padding: 11px 0;}
+#jw_header .plugin_info{width: 140px; padding: 10px 0;}
+#jw_header .framework_info{width: 140px; padding: 10px 0;}
+#jw_header .save_field{padding: 10px 0; padding-left: 240px; width: 140px; float: left;}
+#jw_header .save_field a{color: #ccc; display: block; padding: 5px; border: 1px solid #ccc; border-radius: 3px; text-align: center;}
+#jw_header .save_field a:hover,#jw_header .save_field a:visited{color: #fff; background: rgba(255,255,255,.5); text-decoration: none;}
+
+/**
+*	Panel Tabs
+**/
+#jw_tabs{width: 240px;;float:left; display:inline;background-color:#ccc; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; z-index: 1;}
+#jw_tabs a{text-decoration: none;color:#2d2d2d; display: block; border-top: 1px solid #e8e9eb; border-bottom: 1px solid #bbbdc1; padding: 10px;}
+#jw_tabs a:hover, #jw_tabs > ul > li.active > a{color: #FFF; border-top: 1px solid #96979a; border-bottom:1px solid #313233; background-color:#636466;}
+#jw_tabs ul{margin:0; padding: 0;}
+#jw_tabs > ul{border-right: 1px solid #bdbdbd;}
+#jw_tabs ul li{margin:0; position:relative;}
+
+/* Child Tabs */
+#jw_tabs ul li ul{display: none; background:#7d7d7d; font-size: 90%; padding: 5px 0;}
+#jw_tabs ul li.active a{cursor: default;}
+#jw_tabs ul li.active li a{cursor: pointer;}
+#jw_tabs ul li.active li.active a{cursor: default;}
+#jw_tabs ul li ul li{margin: 5px 0;}
+#jw_tabs ul li ul li a{border: none; padding: 5px 10px; color: #FFF;}
+#jw_tabs ul li ul li a:hover, #jw_tabs ul li ul li.active a{border: none; background-color: #b2b3b7;}
+
+
+
+/*Indicator*/
+#jw_tabs ul li.active span.indicator, #jw_tabs > ul > li:hover span.indicator{display: block;}
+span.indicator{display: none; position: absolute; top: 0; right: -10px; width: 0; height: 0; border-top: 19px solid transparent; border-bottom: 19px solid transparent; border-left: 10px solid #636466;}
+
+/**
+*	Panel Content
+**/
+#jw_content{width:720px;float:left;display:inline; z-index: 2; color: #7d7d7d;}
+
+#jw_content .option{clear: left; overflow:hidden;}
+
+#jw_content #content_wrap{padding-left: 20px; padding-bottom: 20px; overflow:hidden;}
+#jw_content #content_wrap > div{display: none;}
+#jw_content #content_wrap > div.active{display: block;}
+#jw_content label{height:32px;display:block;width:160px;float:left;font:14px Tahoma, Geneva, sans-serif;padding:9px; font-weight: bold;}
+#jw_content div.option{margin-top: 20px;}
+#jw_content small.option_desc{margin-left: 178px;}
+
+/** Inputs **/
+
+/*Text & Textarea*/
+#jw_content input[type="text"], #jw_panel input[type="password"], #jw_panel input[type="file"], #jw_panel input[type="button"], #jw_panel input[type="submit"], #jw_panel input[type="reset"], #jw_panel input[type="email"], #jw_panel input[type="number"], #jw_panel input[type="search"], #jw_panel input[type="tel"], #jw_panel input[type="url"], #jw_panel select{height:32px;width:500px;padding:9px;border-radius: 3px; color: #7d7d7d;}
+#jw_content input, #jw_content textarea{ box-shadow: rgba(0,0,0,0.1) 0 0 8px;background: -webkit-gradient(linear, left top, left 32, from(#EEE), to(#FFF));}
+#jw_content input:focus, #jw_content textarea:focus{outline: none; box-shadow: rgba(0,0,0,0.2) 0 0 8px}
+#jw_content textarea, #jw_content select{border-radius: 12px; color: #7d7d7d;}
+#jw_content textarea {width: 500px; height: 225px; padding: 10px;  background: -webkit-gradient(linear, left top, left 128, from(#EEE), to(#FFF));}
+
+/** Radio Buttons **/
+#jw_content .jw_group_wrap{ width: 500px; float:left;}
+#jw_content .jw_group_wrap:after{clear:both;}
+#jw_content .jw_group_wrap label{float: left; height:100%; width: 100px; font-size: 12px; font-weight:normal;}
+
+/* List format */
+#jw_content .jw_group_wrap ul{margin: 0;}
+#jw_content .jw_group_wrap ul li{margin: 0;}
+#jw_content .jw_group_wrap ul label{float: none; padding: 5px inherit;}
+
+/** Textual Content **/
+#jw_content h3{font-size: 23px; font-family:Tahoma, Geneva, sans-serif; color: #2d2d2d; font-weight: normal;}
+#jw_content p{font-size: 14px; color: #7d7d7d;}
+
+/** Dropdowns **/
+#jw_content select{width: 500px;}
+
+/**
+*	Useful stuff
+**/
+.clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0;}
+.panel_error{display:block; background: rgb:(255,102,0); background: rgba(255,0,0,.5); padding: 10px; }
+
