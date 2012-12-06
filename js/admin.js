@@ -37,9 +37,28 @@ jQuery(document).ready(function($){
 			
 			$('#jw_cont_'+contID).delay(250).fadeIn(250,function(e){
 				$(this).addClass('active');
-			});
-			
+			});			
 		}
+	});
+	
+	$('#jw_panel_save').click(function(e){
+		
+		var loader = $('#ajax_loader');
+		loader.fadeIn(250);
+		
+		var formData = $('#jw_panel_form').serialize();
+		var data = {
+			action: jwPanelParams.ajaxAction,
+			formInfo: formData
+		};
+		
+		console.log(data);
+		$.post(ajaxurl, data, function(e){
+			var jObj = jQuery.parseJSON(e);
+			console.log(jObj);
+			loader.fadeOut(250);
+		});
+		
 	});
 	
 });

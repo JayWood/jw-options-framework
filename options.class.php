@@ -5,14 +5,6 @@
  *	@package WordPress
  */
  
-
-
-/*
- *	JW_Options
- */
- 
-
- 
 if(!class_exists('JW_Options')){
 
 /**
@@ -24,7 +16,7 @@ if(!class_exists('JW_Options')){
 		 *	@access private
 		 *	@var string Current version of the options panel class.
 		 */
-		private $ver = "1.0.0a";
+		private $ver = "1.1b";
 		
 		/**
 		 *	@access private
@@ -53,10 +45,12 @@ if(!class_exists('JW_Options')){
 		/**
 		 *	Use ajax in the options form?
 		 *
+		 *	Removed, form is completely AJAX
+		 *
 		 *	@access private
 		 *	@var boolean Defaults to TRUE.
 		 */
-		private $ajax;
+		//private $ajax;
 		
 		/**
 		 *	Used in menu pages and throughout the plugin
@@ -129,7 +123,7 @@ if(!class_exists('JW_Options')){
 		 *	Will invoke wp_die() if not set.
 		 *	@var string Should be set to __FILE__
 		 */
-		private $plug_data;
+		private $file_data;
 		
 		/**
 		 *	Should we show API warnings?
@@ -143,7 +137,19 @@ if(!class_exists('JW_Options')){
 		 *
 		 *	@var string
 		 */
-		private $fType;
+		private $fType = 'unknown';
+		
+		/**
+		 *	Handles any form related errors prior to processing.
+		 *	
+		 *	@var array Associative array of errors in id => error_msg format.
+		 */
+		private $errors;
+		
+		/**
+		 *	Holds Option Data Array
+		 */
+		private $opData;
 		 
 		function JJW_Options($ops){
 			$this->__construct($ops);
@@ -154,7 +160,6 @@ if(!class_exists('JW_Options')){
 			add_action('admin_init', array(&$this,'regAdminStuff'));
 			add_action('admin_menu', array(&$this, 'setupAdminMenu'));
 			add_action('init', array(&$this, 'regStuff'));
-			
 			
 			// Setup all the class variables, kinda messy no?
 			$tmp_ops = !isset($ops['op_array']) || !is_array($ops['op_array']) ? wp_die($this->errorHandler('Options array does not exist within the data array, please read the documentation.',0)) : $ops['op_array'];
@@ -167,40 +172,121 @@ if(!class_exists('JW_Options')){
 			unset($tmp_tabs);
 			
 			$this->prefix = !isset($ops['prefix']) ? 'jw_' : $ops['prefix'];
-			$this->ajax = !isset($ops['use_ajax']) ? TRUE : $ops['use_ajax'];
+			/* Form is now AJAX only. */
+			//$this->ajax = !isset($ops['use_ajax']) ? TRUE : $ops['use_ajax'];
 			$this->plugin_title = !isset($ops['plugin_title']) ? 'JW Options Panel' : $ops['plugin_title'];
 			$this->menu_title = !isset($ops['menu_title']) ? "JW Options" : $ops['menu_title'];
 			$this->cap = !isset($ops['capability']) ? 'manage_options' : $ops['capability'];
 			$this->slug = !isset($ops['slug']) ? $this->prefix.'options_panel' : $ops['slug'];
 			$this->icon = !isset($ops['icon'])? NULL : $ops['icon'];
 			$this->menu_pos = !isset($ops['menu_pos']) ? NULL : intval($ops['menu_pos']);
-			$this->menu_type = !isset($ops['menu_type']) || !in_array($ops['menu_type'], array('page', 'link', 'comment', 'managment', 'option', 'theme', 'plugin', 'user', 'dashboard', 'post', 'media', 'new')) ? 'new' : $ops['menu_type'];
-			$this->plug_data = !isset($ops['plug_data']) ? wp_die(__('JW_Panel: Fatal ERROR. Could not retrieve plugin data.  Please read documentation.')) : $ops['plug_data'];
+			$this->menu_type = !isset($ops['menu_type']) || !in_array($ops['menu_type'], array('page', 'link', 'comment', 'management', 'option', 'theme', 'plugin', 'user', 'dashboard', 'post', 'media', 'new')) ? 'new' : $ops['menu_type'];
+			$this->file_data = !isset($ops['file_data']) ? wp_die(__('JW_Panel: Fatal ERROR. Could not retrieve plugin data.  Please read documentation.')) : $ops['file_data'];
 			$this->supress_warnings = (isset($ops['supress_warnings']))?$ops['supress_warnings']:TRUE;
 			
-			
-			if(preg_match('/\/themes\//i', $this->plug_data)){
+			if(preg_match('/\/themes\//i', $this->file_data)){
 				$this->fType = 'theme';
-			}elseif(preg_match('/\/plugins\//i', $this->plug_data)){
-				$this->fType = 'plugins';
+			}elseif(preg_match('/\/plugins\//i', $this->file_data)){
+				$this->fType = 'plugin';
 			}
 			
-		} // END __construct
+			add_action('wp_ajax_'.$this->slug.'_save_options', array(&$this, 'handleAjax'));
+			
+		} // END __construct		
+		
+		/**
+		 *	Saves form data from AJAX calls
+		 *
+		 */
+		function handleAjax(){
+			$fData = array();
+			//echo json_encode($_POST, JSON_FORCE_OBJECT);
+			$formDecoded = urldecode($_POST['formInfo']);
+			parse_str($formDecoded, $fData);
+			
+			/* Debug */
+			$output['data'] = $fData;
+			$output['decodedForm'] = $formDecoded;
+			
+			
+			if(!wp_verify_nonce($fData['_wpnonce'], $this->prefix.$this->slug.'-options')){
+				/* Kill script if we can't verify nonce. */
+				$output['error'] = 'Fatal Error'; // Don't make it obvious
+				echo json_encode($output);
+				die();
+			}
+			$output['success'] = 'Nonce Verified';
+			$output['nonce'] = wp_create_nonce($this->prefix.$this->slug.'-options');
+			
+			$options = $fData['jw_panel']['options'];
+			$output['option_data'] = $options;	
+			
+			// Allow users to filter the option saving before it actually stores data.
+			$nOptions = apply_filters($this->prefix.'panel_pre_update', $options);
+			foreach($nOptions as $k => $v){
+				update_option($k, $v);
+			}
+			
+			
+			echo json_encode($output);
+			
+			die();
+			
+		}
+		
+		/**
+		 *	Custom Checked
+		 *
+		 *	Allows using arrays in checked variables
+		 */
+		function jop_checked($haystack, $cur, $show = FALSE){
+			if(is_array($haystack) && in_array($cur, $haystack)){
+					$cur = $haystack = 1;
+			}
+			return checked($haystack, $cur, $show);
+		}
+		
 		
 		/**
 		*	Registers administrator stylesheets and scripts.
 		*/
 		function regAdminStuff(){
 			$this->setupSettingsRegistry();
-			wp_register_style('admin-css', plugins_url('css/admin.css', __FILE__), array('thickbox'), '1.0a', 'all');
-			wp_register_script('admin-js', plugins_url('js/admin.js', __FILE__), array('jquery', 'media-upload', 'thickbox'), '1.0a', 'all');
+			if('theme' == $this->fType){
+				$stylesheetDir = get_bloginfo('stylesheet_directory');
+				$dirs = array(
+					$stylesheetDir.'/'.basename( dirname(  dirname(__FILE__) ) ).'/jw-options-framework/css/admin.css',
+					$stylesheetDir.'/'.basename( dirname(  dirname(__FILE__) ) ).'/jw-options-framework/js/admin.js',
+				);
+			}else{
+				$dirs = array(
+					plugins_url('css/admin.css', __FILE__),
+					plugins_url('js/admin.js', __FILE__)
+				);
+			}
+			wp_register_style('admin-css', $dirs[0] , array('thickbox'));
+			wp_register_script('admin-js', $dirs[1], array('jquery', 'media-upload', 'thickbox'));
+			
 		}
 		
 		/**
 		 *	Registers site-wide stylesheets.
 		 */
 		function regStuff(){
-			wp_register_style('960-css', plugins_url('css/960.css', __FILE__), array(), '1.0', 'all');
+			
+			if('theme' == $this->fType){
+				$stylesheetDir = get_bloginfo('stylesheet_directory');
+				$x = dirname(__FILE__);
+				$dirs = array(
+					$stylesheetDir.'/'.basename( dirname(  dirname(__FILE__) ) ).'/jw-options-framework/css/960.css'
+				);
+			}else{
+				$dirs = array(
+					plugins_url('css/960.css', __FILE__)
+				);
+			}
+			
+			wp_register_style('960-css', $dirs[0], array(), '1.0', 'all');
 		}
 		
 		/**
@@ -208,7 +294,7 @@ if(!class_exists('JW_Options')){
 		 */
 		function printAdminCss(){
 			wp_enqueue_style('admin-css');
-			wp_enqueue_style('960-css');
+			//wp_enqueue_style('960-css');
 		}
 		
 		/**
@@ -216,6 +302,7 @@ if(!class_exists('JW_Options')){
 		 */
 		function printAdminJs(){
 			wp_enqueue_script('admin-js');
+			wp_localize_script('admin-js', 'jwPanelParams', array('ajaxAction'=>$this->slug.'_save_options'));
 		}
 		
 		
@@ -335,36 +422,51 @@ if(!class_exists('JW_Options')){
 		 *	Displays the options panel.
 		 */
 		function renderOptionsPanel(){
-			$form_method = ($this->ajax == FALSE) ? 'method="post" action="options.php"' : '';
-			$plugin_data = get_plugin_data($this->plug_data);
+			
+			switch($this->fType){
+				case 'plugin':
+					$p_data = get_plugin_data($this->file_data);
+					$op_name = $p_data['Name'];
+					$op_ver = $p_data['Version'];
+					$op_author = $p_data['Author'];
+					break;
+				case 'theme':
+					$themeObject = wp_get_theme();
+					$op_name = $themeObject->Name;
+					$op_ver = $themeObject->Version;
+					$op_author = $themeObject->Author;
+					break;
+				default:
+					$op_name = $this->frameworkName;
+					$op_ver = $this->ver;
+					$op_author = "Unknown";
+					break;
+			}
 			
 			?>
             	<div class="wrap">
                 	<div id="jw_options_panel">
-                    	<div id="ajax_loader" style="display:none;"></div>
-                    	<form id="jw_panel_form" <?php echo $form_method ?> >
-                        	<? echo settings_fields($this->slug); ?>
+                    	<form id="jw_panel_form">
+                        	<?  echo settings_fields($this->prefix.$this->slug); ?>
                             <div id="jw_header">
-                            	<div class="plugin_title"><h2><?php echo $plugin_data['Name']; ?></h2></div>
+                            	<div class="plugin_title"><h2><?php echo  $op_name; ?></h2></div>
                                 <div class="plugin_info">
-                                	<p class="info_text">Version: <? echo $plugin_data['Version']; ?></p>
-                                	<p class="info_text">Author: <? echo $plugin_data['Author']; ?></p>
+                                	<p class="info_text">Version: <? echo  $op_ver; ?></p>
+                                	<p class="info_text">Author: <? echo  $op_author; ?></p>
                                 </div>
                                 <div class="framework_info">
                                 	<p class="info_text"><a href="<? echo $this->frameworkURL; ?> " title="Get this framework for your next project."><? echo $this->frameworkName; ?></a></p>
                                     <p class="info_text">v. <? echo $this->ver; ?></p>
                                 </div>
                                 <div class="save_field">
-                                <? if($this->ajax == FALSE): ?>
-                                	<input type="submit" name="submit" value="<? _e('Save Changes'); ?>" class="button-primary" />
-                                <? else: ?>
-                                	<a href="javascript:void()" id="save-changes"><? _e('Save Changes'); ?></a>
-                                <? endif; ?>
+                                	<a href="javascript:;" id="jw_panel_save"><? _e('Save Changes'); ?></a>
                                 </div>
                             </div>
                             <div id="jw_tabs"><? echo $this->buildTabs(); ?></div>
                             <div id="jw_content"><? echo $this->buildContent(); ?></div>
-                            <div id="jw_footer"></div>                        </form>
+                            <div id="jw_footer"></div>
+                        </form>
+                    	<div id="ajax_loader" style="display:none;"><span></span></div>
                     </div>
                 </div>
             <?
@@ -482,7 +584,7 @@ if(!class_exists('JW_Options')){
 							$output .= $this->buildDropdown($o);
 							break;
 						case 'media_upload':
-							$output .= $this->buildMedia($o);
+							//$output .= $this->buildMedia($o);
 							break;
 						default:
 							$output .= $this->errorHandler('Supplied option "'.$o['type'].'" is not a viable option.');
@@ -529,6 +631,7 @@ if(!class_exists('JW_Options')){
 		*		'preview_size'	- Default:NULL	Array		Width and Height of the image.
 		*		'desc'			- Default:NULL	String		Description of the upload field.
 		*		'tooltip'		- Default:NULL	String		An added hint.
+		*		'required'		- Default:NULL  Boolean		Rather or not to require this field.  (Should provide default)
 		*/
 		function buildMedia(Array $o){
 			if(!array_key_exists('id', $o) || !array_key_exists('label', $o) || empty($o['id']) || empty($o['label']))
@@ -538,6 +641,8 @@ if(!class_exists('JW_Options')){
 			$def = empty( $o['default'] ) ? '' : $o['default'];
 			$imgSrc = get_option($opID, $def);
 			$uTxt = empty($o['upload_text']) ? "Upload Image" : $o['upload_text'];
+			
+			$required = isset($o['required']) && !empty($o['required']) ? 'required' : '';
 			
 			$output = '<div id="option_'.$o['id'].'" class="option">';
 			$output .= '<label for="jw_panel_image_upload_'.$opID.'">'.$o['label'].'</label>';
@@ -552,7 +657,7 @@ if(!class_exists('JW_Options')){
 				}
 				$output .= '<div class="imgPreview"><img src="'.$imgSrc.'" '.$fSize.' id="img_prev_'.$opID.'"></div>';
 			}
-			$output .= '<input type="text" size="36" id="jw_panel_image_upload_'.$opID.'" name="jw_panel[options]['.$opID.']" value="">';
+			$output .= '<input type="text" size="36" id="jw_panel_image_upload_'.$opID.'" name="jw_panel[options]['.$opID.']" value="" class="'.$required.'">';
 			$output .= '<input id="jw_panel_image_btn_'.$opID.'" type="button" value="'.$uTxt.'" />';
 			$output .= isset($o['desc']) && !empty($o['desc']) ? '<br /><small class="option_desc">'.$o['desc'].'</small>' : '';
 			$output .= isset($o['tooltip']) && !empty($o['tooltip']) ? '<span class="tooltip_actuator"><div class="panel_tooltip" id="tooltip_'.$opID.'">'.$o['tooltip'].'</div></span>' : '';
@@ -573,7 +678,6 @@ if(!class_exists('JW_Options')){
 		 *		'desc'			- Default:NULL	String		Short description about item.
 		 *		'tooltip'		- Default:NULL	String		Used to show a flyout tooltip about the option.
 		 *		'default'		- A single key from the options array, defaults to the first key in the options array.
-		 *		'multiple'		- Default:FALSE	Boolean		Allows select multiple if true.
 		 *
 		 *	@param array() $o Array of option data
 		 *	@return string HTML of checkbox form elements
@@ -588,11 +692,11 @@ if(!class_exists('JW_Options')){
 			$opID = $this->prefix.$o['id'];
 			$opVal = get_option($opID);
 			$order = isset($o['order']) && $o['order']=='list' ? 'list' : '';
-			$multiple = isset($o['multiple']) && $o['multiple']==TRUE?'multiple="multiple"':NULL;
+			//$multiple = isset($o['multiple']) && $o['multiple']==TRUE?'multiple="multiple"':NULL;
 			
 			$output = '<div id="option_'.$o['id'].'" class="option">';
 			$output .= '<label for="jw_panel_options_'.$opID.'">'.$o['label'].'</label>';
-			$output .='<select name="jw_panel[options]['.$opID.']" id="jw_panel_options_'.$opID.'" '.$multiple.'>';
+			$output .='<select name="jw_panel[options]['.$opID.']" id="jw_panel_options_'.$opID.'">';
 			
 			foreach($options as $id=>$name){
 				if($tmpn === 0){$firstID = $id;}
@@ -665,9 +769,9 @@ if(!class_exists('JW_Options')){
 				}
 				
 				if(strtoupper($o['orientation']) == 'LTR'){
-					$output .='<input type="checkbox" name="jw_panel[options]['.$opID.'][]" value="'.$id.'" id="jw_panel_options_'.$opID.'_'.$id.'" '. checked($cur,$id, false) .'> '.$name;
+					$output .='<input type="checkbox" name="jw_panel[options]['.$opID.'][]" value="'.$id.'" id="jw_panel_options_'.$opID.'_'.$id.'" '. $this->jop_checked($cur,$id, false) .'> '.$name;
 				}else{
-					$output .= $name.' <input type="checkbox" name="jw_panel[options]['.$opID.'][]" value="'.$id.'" id="jw_panel_options_'.$opID.'_'.$id.'" '.checked($cur,$id, false).'> ';
+					$output .= $name.' <input type="checkbox" name="jw_panel[options]['.$opID.'][]" value="'.$id.'" id="jw_panel_options_'.$opID.'_'.$id.'" '.$this->jop_checked($cur,$id, false).'> ';
 				}
 				$output .='</label>';
 				
@@ -774,13 +878,13 @@ if(!class_exists('JW_Options')){
 		function buildTextareaOption(Array $o){
 			if(!array_key_exists('id', $o) || !array_key_exists('label',$o) || empty($o['id']) || empty($o['label']))
 				return $this->errorHandler("Text areas require an ID and Label to function properly.", 1);
+				
+			$required = isset($o['required']) && !empty($o['required']) ? 'required' : '';
 			
 			$output = '<div id="option_'.$o['id'].'" class="option">';
 			$output .='<label for="jw_panel_options_'.$this->prefix.$o['id'].'">'.$o['label'].':</label>';
-			$output .='<textarea name="jw_panel[options]['.$this->prefix.$o['id'].'][value]" id="jw_panel_options_'.$this->prefix.$o['id'].'">'.get_option($this->prefix.$o['id'], $o['default']).'</textarea>';
+			$output .='<textarea name="jw_panel[options]['.$this->prefix.$o['id'].']" id="jw_panel_options_'.$this->prefix.$o['id'].'" class="'.$required.'">'.get_option($this->prefix.$o['id'], $o['default']).'</textarea>';
 			$output .= isset($o['desc']) && !empty($o['desc']) ? '<br /><small class="option_desc">'.$o['desc'].'</small>' : '';
-			$output .= isset($o['regEx']) && !empty($o['regEx']) ? '<input type="hidden" name="jw_panel[options]['.$this->prefix.$o['id'].'][regex]" value="'.$o['regEx'].'" id="jw_panel_options_'.$this->prefix.$o['id'].'_regex" />' : '' ;
-			$output .= isset($o['required']) && !empty($o['required']) ? '<input type="hidden" name="jw_panel[options]['.$this->prefix.$o['id'].'][required]" value="'.$o['required'].'" id="jw_panel_options_'.$this->prefix.$o['id'].'_required" />' : '' ;
 			$output .= isset($o['tooltip']) && !empty($o['tooltip']) ? '<span class="tooltip_actuator"><div class="panel_tooltip" id="tooltip_'.$this->prefix.$o['id'].'">'.$o['tooltip'].'</div></span>' : '';
 			$output .= '</div>';
 			
@@ -808,12 +912,12 @@ if(!class_exists('JW_Options')){
 			if(!array_key_exists('id', $o) || !array_key_exists('label',$o) || empty($o['id']) || empty($o['label']))
 				return $this->errorHandler("Text boxes require an ID and Label to function properly.", 1);
 			
+			$required = isset($o['required']) && !empty($o['required']) ? 'required' : '';
+			
 			$output = '<div id="option_'.$o['id'].'" class="option">';
 			$output .='<label for="jw_panel_options_'.$this->prefix.$o['id'].'">'.$o['label'].':</label>';
-			$output .='<input type="text" name="jw_panel[options]['.$this->prefix.$o['id'].'][value]" value="'.get_option($this->prefix.$o['id'], $o['default']).'" id="jw_panel_options_'.$this->prefix.$o['id'].'" />';
+			$output .='<input type="text" name="jw_panel[options]['.$this->prefix.$o['id'].']" value="'.get_option($this->prefix.$o['id'], $o['default']).'" id="jw_panel_options_'.$this->prefix.$o['id'].'" class="'.$required.'"/>';
 			$output .= isset($o['desc']) && !empty($o['desc']) ? '<br /><small class="option_desc">'.$o['desc'].'</small>' : '';
-			$output .= isset($o['regEx']) && !empty($o['regEx']) ? '<input type="hidden" name="jw_panel[options]['.$this->prefix.$o['id'].'][regex]" value="'.$o['regEx'].'" id="jw_panel_options_'.$this->prefix.$o['id'].'_regex" />' : '' ;
-			$output .= isset($o['required']) && !empty($o['required']) ? '<input type="hidden" name="jw_panel[options]['.$this->prefix.$o['id'].'][required]" value="'.$o['required'].'" id="jw_panel_options_'.$this->prefix.$o['id'].'_required" />' : '' ;
 			$output .= isset($o['tooltip']) && !empty($o['tooltip']) ? '<span class="tooltip_actuator"><div class="panel_tooltip" id="tooltip_'.$this->prefix.$o['id'].'">'.$o['tooltip'].'</div></span>' : '';
 			$output .= '</div>';
 			

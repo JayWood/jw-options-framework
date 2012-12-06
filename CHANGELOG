@@ -1,0 +1,22 @@
+How to read this:
+-  Usually means it's removed/deleted
++  Added something
+/  Temporarily commented out (It's still there)
+-> Moved it
+~  Uncategorized change
+
+
+
+1.1b (beta)
+-----------------------------------------------------------------------------------------
+-  Removed RegEx from all fields.
++  Added Required flag for Media Upload (Still need to hook into media upload script)
+/  Disabled media_upload until javascript is finished.
++  Added Ajax functionality
+-  Removed 960 Grid System css form queue
+-> Moved Required flags into "class" attributes instead of separate form field
++  Added ability to detect theme or pluging origin for scripts and data.
+?  May allow users to override panel title, author, and version instead of pulling from plugin/theme data.
+~  Renamed form field names for easier array translation.
+-  Removed Multiple from dropdown attributes
+

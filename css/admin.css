@@ -7,12 +7,15 @@
 
 #jw_options_panel{width:960px; position: relative; height:100%; margin: 10px; background:url('../img/panelbg.jpg') top left repeat-y; overflow:hidden;}
 
-#jw_panel_form{}
+
+/* Setup Ajax Loader */
+#ajax_loader {width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.75);z-index: 999;position: absolute;top: 0;left: 0;}
+#ajax_loader span {margin-left: -51px;margin-top: -16px; background-image: url('../img/loading-custom-dark.gif');width: 102px;height: 32px;display: block;position:absolute; left: 50%; top: 50%;}
 
 /**
 *	Panel Header
 **/
-#jw_header{width: 960px; background-color: #2d2d2d; color:#7e7e7e; height: 50px; z-index: 4;}
+#jw_header{width: 960px; background-color: #2d2d2d; color:#7e7e7e; height: 50px; z-index: 4; overflow:hidden;}
 #jw_header:after{clear:both;}
 #jw_header a, #jw_header a:visited{color: #666; text-decoration: none; font-weight: bold;}
 #jw_header a:hover{color: #CCC;}
